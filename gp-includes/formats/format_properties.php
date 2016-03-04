@@ -201,6 +201,58 @@ class GP_Format_Properties extends GP_Format {
 	}
 	
 	/**
+	 * Splits a properties file line on the = or : character.
+	 *
+	 * Skips escaped values (\= or \:) in the key and matches the first unescaped instance.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @param string $line The line to split.
+	 * @param GP_Project $project The project object to read the translations in to.
+	 *
+	 * @return bool Returns true if the line was split successfully, false otherwise.
+	 */
+	private function split_properties_line( $line, &$key, &$value ) {
+		// Make sure to reset the key/value before continuing.
+		$key = '';
+		$value = '';
+		
+		// Split the string on any = or :, get back where the string was split.
+		$matches = preg_split( '/[=|:]/', $line, null, PREG_SPLIT_OFFSET_CAPTURE );
+		
+		// Check the number of matches.
+		$num_matches = sizeof( $matches );
+
+		// There's always one match (the entire line) so if we matched more than one, let's see if we can split the line.
+		if ( $num_matches > 1 ) {
+			// Loop through the matches, starting at the second one.
+			for( $i = 1; $i < $num_matches; $i ++ ) {
+				// Get the location of the current match.
+				$location = $matches[ $i ][ 1 ];
+
+				// If the character before it (-2 as the separator character is still part of the match) 
+				// is an escape, we don't have a match yet.
+				if ( '\\' != $line[ $location - 2 ] ) {
+					// Set the return values for the key and value.
+					$key = substr( $line, 0, $location - 1 ); 
+					$value = substr( $line, $location );
+					
+					// Handle the special case where the separator is actually " = " or " : ".
+					if ( gp_endswith( $key, ' ' ) && gp_startswith( $value, ' ' ) ) {
+						$key = substr( $key, 0, -1 );
+						$value = substr( $value, 1 );
+					}
+
+					return true;
+				}
+			}
+		} 
+
+		// Return false since we didn't find a valid line to split.
+		return false;
+	}
+	
+	/**
 	 * Reads a set of translations from a properties file.
 	 *
 	 * @since 1.1.0
@@ -269,6 +321,8 @@ class GP_Format_Properties extends GP_Format {
 		$entry = $comment = null;
 		$inline = false;
 		$lines = explode( "\n", $file );
+		$key = '';
+		$value = '';
 
 		foreach ( $lines as $line ) {
 			if ( preg_match( '/^(#|!)\s*(.*)\s*$/', $line, $matches ) ) {
@@ -289,15 +343,15 @@ class GP_Format_Properties extends GP_Format {
 				} else {
 					$comment = null;
 				}
-			} else if ( false === $inline && preg_match( '/^(.*)(\s?[=|:]\s?)(.*)$/', $line, $matches ) ) {
+			} else if ( false === $inline && $this->split_properties_line( $line, $key, $value ) ) {
 				// Check to see if this line continues on to the next
 				if ( gp_endswith( $line, '\\' ) ) {
 					$inline = true;
-					$matches[3] = trim( $matches[3], '\\' );
+					$value = trim( $value, '\\' );
 				}
 				
 				$entry = new Translation_Entry();
-				$entry->context = rtrim( $this->unescape( $matches[1] ) );
+				$entry->context = rtrim( $this->unescape( $key ) );
 				/* So the following line looks a little weird, why encode just to decode?
 				 *
 				 * The reason is simple, properties files are in ISO-8859-1 aka Latin-1 format
@@ -308,7 +362,7 @@ class GP_Format_Properties extends GP_Format {
 				 * So let's convert everything to escaped unicode first and then decode 
 				 * the whole kit and kaboodle to UTF-8.
 				 */
-				$entry->singular = $this->uni_decode( $this->ascii_uni_encode( $matches[3] ) );
+				$entry->singular = $this->uni_decode( $this->ascii_uni_encode( $value ) );
 
 				if ( ! is_null( $comment )) {
 					$entry->extracted_comments = $comment;
