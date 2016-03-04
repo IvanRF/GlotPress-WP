@@ -13,6 +13,15 @@ class GP_Format_Properties extends GP_Format {
 	 *
 	 * @since 1.1.0
 	 *
+	 * @param GP_Project $project The project the strings are being exported for, not used
+	 *                            in this format but part of the scaffold of the parent object.
+	 * @param GP_Locale $locale The locale object the strings are being exported for. not used
+	 *                          in this format but part of the scaffold of the parent object.
+	 * @param GP_Translation_Set $translation_set The locale object the strings are being 
+	 *                                            exported for. not used in this format but part
+	 *                                            of the scaffold of the parent object.
+	 * @param GP_Translation $entries The entries to export.
+	 *
 	 * @return string
 	 */
 	public function print_exported_file( $project, $locale, $translation_set, $entries ) {
@@ -80,7 +89,7 @@ class GP_Format_Properties extends GP_Format {
 	 *
 	 * @since 1.1.0
 	 *
-	 * @param $string string The string to encode.
+	 * @param string Sstring The string to encode.
 	 *
 	 * @return string
 	 */
@@ -103,7 +112,7 @@ class GP_Format_Properties extends GP_Format {
 	/**
 	 * Decodes a unicode escaped string to a PHP string.
 	 *
-	 * @param $string string The string to decode.
+	 * @param string $string The string to decode.
 	 *
 	 * @since 1.1.0
 	 *
@@ -119,7 +128,7 @@ class GP_Format_Properties extends GP_Format {
 	 *
 	 * @since 1.1.0
 	 *
-	 * @param $matches array The array of matches from preg_replace_callback().
+	 * @param array $matches The array of matches from preg_replace_callback().
 	 *
 	 * @return string
 	 */
@@ -162,8 +171,8 @@ class GP_Format_Properties extends GP_Format {
 	 *
 	 * @since 1.1.0
 	 *
-	 * @param $string string The UTF-8 string to process.
-	 * @param $offset int The offset of the string to return the character value of.
+	 * @param string $string The UTF-8 string to process.
+	 * @param int $offset The offset of the string to return the character value of.
 	 *
 	 * @return int|bool
 	 */
@@ -257,8 +266,8 @@ class GP_Format_Properties extends GP_Format {
 	 *
 	 * @since 1.1.0
 	 *
-	 * @param $file_name string The filename of the uploaded properties file.
-	 * @param $project GP_Project The project object to read the translations in to.
+	 * @param string $file_name The filename of the uploaded properties file.
+	 * @param GP_Project $project The project object to read the translations in to.
 	 *
 	 * @return Translations
 	 */
@@ -306,7 +315,7 @@ class GP_Format_Properties extends GP_Format {
 	 *
 	 * @since 1.1.0
 	 *
-	 * @param $file_name string The filename of the uploaded properties file.
+	 * @param string $file_name The filename of the uploaded properties file.
 	 *
 	 * @return Translations
 	 */
@@ -417,8 +426,8 @@ class GP_Format_Properties extends GP_Format {
 	 *
 	 * @since 1.1.0
 	 *
-	 * @param $a Translations The first translation to compare.
-	 * @param $b Translations The second translation to compare.
+	 * @param Translations $a The first translation to compare.
+	 * @param Translations $b The second translation to compare.
 	 *
 	 * @return int
 	 */
@@ -435,7 +444,7 @@ class GP_Format_Properties extends GP_Format {
 	 *
 	 * @since 1.1.0
 	 *
-	 * @param $string string The string to unescape.
+	 * @param string $string The string to unescape.
 	 *
 	 * @return string
 	 */
@@ -448,7 +457,7 @@ class GP_Format_Properties extends GP_Format {
 	 *
 	 * @since 1.1.0
 	 *
-	 * @param $string string The string to escape.
+	 * @param string $string The string to escape.
 	 *
 	 * @return string
 	 */
@@ -461,7 +470,7 @@ class GP_Format_Properties extends GP_Format {
 	 *
 	 * @since 1.1.0
 	 *
-	 * @param $string string The string to escape.
+	 * @param string $string The string to escape.
 	 *
 	 * @return string
 	 */
