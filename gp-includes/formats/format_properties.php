@@ -89,7 +89,7 @@ class GP_Format_Properties extends GP_Format {
 	 *
 	 * @since 1.1.0
 	 *
-	 * @param string Sstring The string to encode.
+	 * @param string $string The string to encode.
 	 *
 	 * @return string
 	 */
