@@ -217,7 +217,8 @@ class GP_Format_Properties extends GP_Format {
 	 * @since 1.1.0
 	 *
 	 * @param string $line The line to split.
-	 * @param GP_Project $project The project object to read the translations in to.
+	 * @param string $key The key part of the properties file string if found.
+	 * @param string $value The value part of the properties file string if found.
 	 *
 	 * @return bool Returns true if the line was split successfully, false otherwise.
 	 */
