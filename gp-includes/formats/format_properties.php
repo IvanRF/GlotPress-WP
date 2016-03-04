@@ -110,7 +110,7 @@ class GP_Format_Properties extends GP_Format {
 	 * @return string
 	 */
 	private function uni_decode( $string ) {
-		return preg_replace_callback( "/\\\\u([a-f0-9]{4})/", array( $this, "uni_decode_callback" ), $string );
+		return preg_replace_callback( "/\\\\u([a-fA-F0-9]{4})/", array( $this, "uni_decode_callback" ), $string );
 	}
 	
 	/**
